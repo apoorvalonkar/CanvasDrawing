@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Apoorva's canvas</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript">
+    	var pageLoadStart = new Date();
+    </script>
+    <style type="text/css">
+        html,body{
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="myCanvas"></canvas>
+    <script>
+
+
+
+        var canvas = document.getElementById('myCanvas');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        var c = canvas.getContext('2d');
+
+        var renderStart= new Date();
+
+        c.fillStyle ="#fff3cc";
+        c.fillRect(0,0,canvas.width,canvas.height);
+        c.fillStyle = "black";
+		var radius = (canvas.width/40)+(canvas.height/40);
+
+        var circleCenterX=(canvas.width/2);
+        var circleCenterY=(canvas.height/2);
+		var offset=0
+
+
+        drawCircle = function drawCircle(){
+		    c.strokeStyle="#fff3cc";
+            c.beginPath();
+            c.arc(circleCenterX,circleCenterY,radius,0,2*Math.PI);
+            c.stroke();
+
+            for(i=1;i<6;i++){
+ 
+                c.beginPath();
+                c.arc(circleCenterX,circleCenterY,radius*i,0,2*Math.PI);
+                c.stroke();
+                
+         }
+     }
+
+     drawLine=function drawLine(){
+
+        var gap = 7;//The deviation angle in degree
+        var numberDividCircle = 360/gap;
+
+         for(let i=0; i<numberDividCircle;i+=2){
+
+              
+                c.beginPath();
+                c.moveTo(circleCenterX,circleCenterY);
+				x1=getNextBlackAreaX(radius,gap*i,circleCenterX);
+				y1=getNextBlackAreaY(radius,gap*i,circleCenterY);
+				x2=getNextBlackAreaX(radius,gap*(i+1),circleCenterX);
+				y2=getNextBlackAreaY(radius,gap*(i+1),circleCenterY);
+				c.lineWidth=1;
+                c.lineTo(x1, y1);
+                c.lineTo(x2, y2);
+                c.closePath();
+                c.fill();
+				
+				c.beginPath();
+				c.moveTo(x1,y1);
+				c.lineTo(getNextBlackAreaX(radius*2,(gap)*(i-3),circleCenterX), getNextBlackAreaY(radius*2,(gap)*(i-3),circleCenterY));
+                
+                c.lineTo(getNextBlackAreaX(radius*2,(gap)*(i-2),circleCenterX), getNextBlackAreaY(radius*2,(gap)*(i-2),circleCenterY));
+				c.lineTo(x2,y2);
+                c.closePath();
+                c.fill();
+				
+				
+				c.beginPath();
+				c.moveTo(getNextBlackAreaX(radius*2,(gap)*(i-3),circleCenterX),getNextBlackAreaY(radius*2,(gap)*(i-3),circleCenterY));
+				c.lineTo(getNextBlackAreaX(radius*3,(gap)*(i+3),circleCenterX), getNextBlackAreaY(radius*3,(gap)*(i+3),circleCenterY));
+                
+                c.lineTo(getNextBlackAreaX(radius*3,(gap)*(i+4),circleCenterX), getNextBlackAreaY(radius*3,(gap)*(i+4),circleCenterY));
+				c.lineTo(getNextBlackAreaX(radius*2,(gap)*(i-2),circleCenterX),getNextBlackAreaY(radius*2,(gap)*(i-2),circleCenterY));
+                c.closePath();
+                c.fill();
+				
+				c.beginPath();
+				c.moveTo(getNextBlackAreaX(radius*3,(gap)*(i+3),circleCenterX),getNextBlackAreaY(radius*3,(gap)*(i+3),circleCenterY));
+				c.lineTo(getNextBlackAreaX(radius*4,(gap)*(i-3),circleCenterX), getNextBlackAreaY(radius*4,(gap)*(i-3),circleCenterY));
+
+                c.lineTo(getNextBlackAreaX(radius*4,(gap)*(i-2),circleCenterX), getNextBlackAreaY(radius*4,(gap)*(i-2),circleCenterY));
+				c.lineTo(getNextBlackAreaX(radius*3,(gap)*(i+4),circleCenterX),getNextBlackAreaY(radius*3,(gap)*(i+4),circleCenterY));
+				
+                c.closePath();
+                c.fill();
+				
+				c.beginPath();
+				c.moveTo(getNextBlackAreaX(radius*4,(gap)*(i-3),circleCenterX), getNextBlackAreaY(radius*4,(gap)*(i-3),circleCenterY));
+				c.lineTo(getNextBlackAreaX(radius*5,(gap)*i,circleCenterX), getNextBlackAreaY(radius*5,(gap)*i,circleCenterY));
+
+                c.lineTo(getNextBlackAreaX(radius*5,(gap)*(i+1),circleCenterX), getNextBlackAreaY(radius*5,(gap)*(i+1),circleCenterY));
+				c.lineTo(getNextBlackAreaX(radius*4,(gap)*(i-2),circleCenterX), getNextBlackAreaY(radius*4,(gap)*(i-2),circleCenterY));
+                c.closePath();
+                c.fill();
+				
+           
+			
+        }
+      
+       function getNextBlackAreaX(r,angle,x){
+            return r * Math.cos(toRadians(angle)) + x;
+        }
+        function getNextBlackAreaY(r,angle,y){
+            return r * Math.sin(toRadians(angle)) + y;
+        }
+        function toRadians (angle) {
+            return angle * (Math.PI / 180);
+        }
+
+       }
+
+    drawCircle();
+    drawLine();
+
+    var renderEnd = new Date();
+
+    document.onreadystatechange = function () {
+      if (document.readyState === 'complete') {
+        console.log("Time to render the page: "+ (renderEnd- renderStart) + " ms");
+
+      }
+    }
+
+    window.addEventListener("load",function(event){
+     var pageLoadEnd=new Date;
+     console.log("Time to load the page: "+(pageLoadEnd- pageLoadStart)+" ms");
+
+       } );    
+
+    </script>
+
+</body>
+</html>       
